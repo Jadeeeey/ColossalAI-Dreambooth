@@ -1,0 +1,28 @@
+#!/bin/bash
+
+#PBS -N TrainDreamBooth
+#PBS -q normal
+#PBS -l select=1:mem=64G:ngpus=1
+#PBS -l walltime=12:00:00
+#PBS -P Personal
+#PBS -o out-run.txt
+#PBS -e errors.txt
+
+source activate nndl
+
+MODEL_NAME="CompVis/stable-diffusion-v1-4"
+TRAIN_DATA_DIR="Fazzie/Teyvat"
+OUTPUT_DIR="scratch/colossalai/ColossalAI/examples/images/dreambooth/weight_output"
+
+python /home/users/nus/e1216290/scratch/colossalai/ColossalAI/examples/images/dreambooth/train_dreambooth.py \
+    --pretrained_model_name_or_path="CompVis/stable-diffusion-v1-4" \
+    --instance_data_dir="scratch/colossalai/ColossalAI/examples/images/dreambooth/Teyvat/data" \
+    --output_dir="scratch/colossalai/ColossalAI/examples/images/dreambooth/weight_output" \
+    --instance_prompt="a photo of a dog" \
+    --resolution=512 \
+    --train_batch_size=1 \
+    --gradient_accumulation_steps=1 \
+    --learning_rate=5e-6 \
+    --lr_scheduler="constant" \
+    --lr_warmup_steps=0 \
+    --num_class_images=200 \
